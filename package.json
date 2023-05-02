@@ -1,0 +1,7 @@
+{
+  "name": "web20-2023",
+  "version": "1.0.0",
+  "dependencies": {
+    "puppeteer": "^20.0.0"
+  }
+}
