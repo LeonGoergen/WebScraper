@@ -1,6 +1,5 @@
-console.log("Hallo")
-
 const puppeteer = require('puppeteer');
+const {ConsoleMessage} = require("puppeteer");
 
 (async () => {
     // Launch a headless Chrome browser
@@ -12,26 +11,46 @@ const puppeteer = require('puppeteer');
     // Navigate to the website
     await page.goto('https://www.cinestar.de/kino-rostock-capitol');
 
-    async function processMovieTitles(page) {
-        // Find all div elements with the class "swiper-slide"
-        const divElements = await page.$$eval('div.swiper-slide', elements => {
-            return elements.filter(element => {
-                // Check if the div element has only one child element which is a span element
-                return element.childNodes.length === 1 && element.childNodes[0].nodeName.toLowerCase() === 'span';
-            }).map(element => element.outerHTML);
-        });
+    // Try to get the buttons "Woche", "Heute", "Top10", ...
+    const elements = await page.$$('.swiper-slide');
 
-        // Loop through each div element and click on it
-        for (const divElement of divElements) {
-            await page.setContent(divElement);
-            await page.click('span');
-            await page.waitForSelector('.title');
+    const movieTitles = []
+    for (let i = 0; i < elements.length; i++) {
+        await elements[i].click(); // Button click does not seem to work
+        await page.waitForSelector('.title');
 
-            // Get the movie titles
-            const movieTitles = await page.$$eval('.title', elements => elements.map(element => element.textContent.trim()));
-            console.log(movieTitles);
-        }
+        // Get the movie titles
+        const currentMovies = await page.$$eval('.title', elements => elements.map(element => element.textContent.trim()));
+        movieTitles.push(...currentMovies);
+        console.log(currentMovies);
     }
+
+//    async function processMovieTitles(page) {
+//        // Find all div elements with the class "swiper-slide"
+//        const divElements = await page.$$eval('div.swiper-slide', elements => {
+//            return elements.filter(element => {
+//                // Check if the div element has only one child element which is a span element
+//                if (element.childNodes.length === 1 && element.childNodes[0].nodeName.toLowerCase() === 'span'){
+//                    console.log(element)
+//                }
+//                return element.childNodes.length === 1 && element.childNodes[0].nodeName.toLowerCase() === 'span';
+//            }).map(element => element.outerHTML);
+//        });
+//
+//
+//        // Loop through each div element and click on it
+//        for (const divElement of divElements) {
+//            console.log(`Clicking on "${divElement}"`)
+//            const parentDivElement = await divElement.$('..');
+//            await parentDivElement.click();
+//            await page.waitForSelector('.title');
+//
+//            // Get the movie titles
+//            const currentMovies = await page.$$eval('.title', elements => elements.map(element => element.textContent.trim()));
+//            movieTitles.push(...currentMovies);
+//            console.log(currentMovies);
+//        }
+//    }
 
     // Clean the titles from "Neu:" and empty strings
     const cleanTitles = movieTitles.map(title => title.replace('Neu:', ''));
@@ -47,6 +66,7 @@ const puppeteer = require('puppeteer');
             index === cleanTitles.indexOf(title)
         );
     });
+    console.log("Cleaned Movie Titles:")
     console.log(uniqueTitles);
     console.log(uniqueTitles.length)
 
