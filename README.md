@@ -22,6 +22,7 @@ Die Arbeitspakete können grob wie folgt gegliedert werden:
 - Terminal öffnen
 - Zu gewünschtem Ordner navigieren (cd/ls)
 - " git clone -b cinema-notification https://github.com/clecap/web20-2023.git "
+- cd web20-2023
 - npm -i / pnpm -i (node_modules)
 
 Have fun!
