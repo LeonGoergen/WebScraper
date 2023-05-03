@@ -21,7 +21,7 @@ Die Arbeitspakete können grob wie folgt gegliedert werden:
 ### Repository/Branch clonen
 - Terminal öffnen
 - Zu gewünschtem Ordner navigieren (cd/ls)
-- " git clone -b push-neuer-inhalte https://github.com/clecap/web20-2023.git "
+- " git clone -b cinema-notification https://github.com/clecap/web20-2023.git "
 - npm -i / pnpm -i (node_modules)
 
 Have fun!
