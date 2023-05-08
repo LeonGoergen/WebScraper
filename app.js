@@ -3,7 +3,7 @@ const {ConsoleMessage} = require("puppeteer");
 
 (async () => {
     // Launch a headless Chrome browser
-    const browser = await puppeteer.launch();
+    const browser = await puppeteer.launch({headless: false, slowMo: 100});
 
     // Open a new tab
     const page = await browser.newPage();
@@ -11,18 +11,26 @@ const {ConsoleMessage} = require("puppeteer");
     // Navigate to the website
     await page.goto('https://www.cinestar.de/kino-rostock-capitol#Kinoprogramm');
 
-    // Try to get the buttons "Woche", "Heute", "Top10", ...
-    const [element] = await page.$x("//span[contains(text(), 'TOP 10')]");
-    if (element) {
-        console.log(element);
-        await element.click();
-        const currentMovies = await page.$$eval('.title', elements => elements.map(element => element.textContent.trim()));
-        console.log(currentMovies);
-    } else {
-        console.log("element not found");
-    }
+    // Click on Cookie button
+    await page.waitForSelector('.mmcm-btn.mmcm-btn-save-all');
+    const [cookieButton] = await page.$$('.mmcm-btn.mmcm-btn-save-all');
+    await cookieButton.click();
+    await page.waitForNavigation();
 
-    const movieTitles = await page.$$eval('.title', elements => elements.map(element => element.textContent.trim()));
+    // Try to get the buttons "Woche", "Heute", "Top10", ...
+    let sections = ["Heute", "Vorverkauf", "TOP 10", "Events", "Vorschau"]
+    let movieTitles = [];
+    for (let i = 0; i < sections.length; i++) {
+        let section = sections[i];
+        const [element] = await page.$x(`//span[contains(text(), '${section}')]`);
+        if (element) {
+            await element.click();
+            const currentMovies = await page.$$eval('.title', elements => elements.map(element => element.textContent.trim()));
+            movieTitles.push(...currentMovies);
+        } else {
+            console.log("element not found");
+        }
+    }
 
     // Clean the titles from "Neu:"
     const cleanTitles = movieTitles.map(title => title.replace('Neu:', ''));
