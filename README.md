@@ -24,8 +24,8 @@ AP4/5: API Services: Nachdem die neuen Filme identifiziert wurden, werden mittel
 17.5.:Filmtitel extrahieren und als JSON abspeichern, Social Media Accounts einrichten, Grundgerüst des Webservers\
 24.5.:API Service für ImdB oder vergleichbare Filmdatenbank, Strukturierung/Zusammenführung der Daten\
 31.5.:Erfolgreiche POST Requests an Twitter und Instagram, Abgleich der Filmdaten\
-7.5. :Ansprechende Gestaltung der Posts\
-14.5.:Puffer, Anpassungen, etc.
+7.6. :Ansprechende Gestaltung der Posts\
+14.6.:Puffer, Anpassungen, etc.
 
 # Push neuer Inhalte
 
