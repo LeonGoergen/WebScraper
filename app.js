@@ -1,5 +1,4 @@
 // Express Server
-
 const express = require('express')
 const app = express();
 const hostname = "0.0.0.0";
@@ -114,6 +113,31 @@ async function extractUniqueTitles(filteredMovies) {
         // console.log(uniqueTitles);
 
         await browser.close();
+
+        // First Attempts to get movie rating
+        let requestOptions = {
+            method: 'GET',
+            redirect: 'follow'
+        };
+
+        // Step 1: Search for the movie and get the IMDb ID
+        fetch('https://imdb-api.com/en/API/SearchMovie/k_x53sp327/Inception', requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                // Assuming the first result has the required IMDb ID
+                let imdbId = data.results[0].id;
+
+                // Step 2: Fetch ratings using the IMDb ID
+                fetch(`https://imdb-api.com/en/API/Ratings/k_x53sp327/${imdbId}`, requestOptions)
+                    .then(response => response.json())
+                    .then(ratingsData => {
+                        // Process the ratings data as needed
+                        console.log(ratingsData);
+                    })
+                    .catch(error => console.log('Error fetching ratings:', error));
+            })
+            .catch(error => console.log('Error searching movie:', error));
+
     } catch (error) {
         console.error(error);
     }
