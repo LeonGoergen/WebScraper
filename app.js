@@ -1,3 +1,19 @@
+// Express Server
+
+const express = require('express')
+const app = express();
+const hostname = "0.0.0.0";
+const port = 3000;
+
+app.get("/", (req, res) => {
+    res.send("Cinema Notifications");
+});
+
+app.listen(port, () => {
+    console.log(`Server running at http://${hostname}:${port}/`);
+});
+
+// Webscraper
 const puppeteer = require('puppeteer');
 
 async function launchBrowser() {
