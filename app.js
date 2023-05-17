@@ -2,14 +2,12 @@ const puppeteer = require('puppeteer');
 
 async function launchBrowser() {
     // Launch a headless Chrome browser
-    const browser = await puppeteer.launch({ headless: false, slowMo: 5 });
-    return browser;
+    return await puppeteer.launch({headless: false, slowMo: 5});
 }
 
 async function openPage(browser) {
     // Open a new tab
-    const page = await browser.newPage();
-    return page;
+    return await browser.newPage();
 }
 
 async function navigateToWebsite(page) {
@@ -56,8 +54,7 @@ async function scrapeMovieTitles(page) {
 async function filterMoviesByGenre(movies) {
     // Filter movies by specific genres
     const specificGenres = ['Event', 'Live-Übertragung', 'Sondervorstellung', 'Vorpremiere'];
-    const filteredMovies = movies.filter(movie => !specificGenres.includes(movie.genre));
-    return filteredMovies;
+    return movies.filter(movie => !specificGenres.includes(movie.genre));
 }
 
 async function extractUniqueTitles(filteredMovies) {
