@@ -114,21 +114,15 @@ async function extractUniqueTitles(filteredMovies) {
 
         await browser.close();
 
-        // First Attempts to get movie rating
-        let requestOptions = {
-            method: 'GET',
-            redirect: 'follow'
-        };
-
-        // Step 1: Search for the movie and get the IMDb ID
-        fetch('https://imdb-api.com/en/API/SearchMovie/k_x53sp327/Inception', requestOptions)
+        // First Attempts to get movie rating from "The Whale"
+        fetch('https://imdb-api.com/de/API/SearchMovie/k_x53sp327/The Whale',{method: 'GET', redirect: 'follow'})
             .then(response => response.json())
             .then(data => {
                 // Assuming the first result has the required IMDb ID
                 let imdbId = data.results[0].id;
 
                 // Step 2: Fetch ratings using the IMDb ID
-                fetch(`https://imdb-api.com/en/API/Ratings/k_x53sp327/${imdbId}`, requestOptions)
+                fetch(`https://imdb-api.com/de/API/Ratings/k_x53sp327/${imdbId}`, {method: 'GET', redirect: 'follow'})
                     .then(response => response.json())
                     .then(ratingsData => {
                         // Process the ratings data as needed
