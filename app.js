@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 (async () => {
     try {
         // Launch a headless Chrome browser
-        const browser = await puppeteer.launch({ headless: false, slowMo: 20 });
+        const browser = await puppeteer.launch({ headless: false, slowMo: 5 });
 
         // Open a new tab
         const page = await browser.newPage();
@@ -18,58 +18,49 @@ const puppeteer = require('puppeteer');
         await page.waitForNavigation();
 
         // Define the sections to scrape
-        const sections = ['Heute', 'Vorverkauf', 'TOP 10', 'Events', 'Vorschau'];
+        const sections = ['Woche', 'Heute', 'Vorverkauf', 'TOP 10', 'Events', 'Vorschau'];
 
-        // Scrape the movie titles for each section
-        const movieTitles = [];
+        // Scrape the movie titles and genres for each section
+        const movies = [];
         for (const section of sections) {
             const [element] = await page.$x(`//span[contains(text(), "${section}")]`);
             if (element) {
                 await element.click();
-                await page.waitForSelector('.title');
-                const currentMovies = await page.$$eval('.title', elements => elements.map(element => element.textContent.trim().replace(/^Neu:\s*/, '')));
-                movieTitles.push(...currentMovies);
+                await page.waitForSelector('.ShowTile');
+                const sectionMovies = await page.$$eval('.ShowTile', elements => {
+                    return elements.map(element => {
+                        const titleElement = element.querySelector('.title');
+                        const genreElement = element.querySelector('small');
+                        const title = titleElement ? titleElement.textContent.trim() : '';
+                        const genre = genreElement ? genreElement.textContent.trim() : '';
+                        return { title, genre };
+                    });
+                });
+                movies.push(...sectionMovies);
             } else {
                 console.log(`Section "${section}" not found`);
             }
         }
 
-        // Filter out duplicates and empty strings
-        const uniqueTitles = [...new Set(movieTitles.filter(title => title && title !== 'MEINE CineStarCARD' && title !== 'Passwort wiederherstellen'))];
+        // Filter movies by specific genres
+        const specificGenres = ['Event', 'Live-Übertragung', 'Sondervorstellung', 'Vorpremiere'];
+        const filteredMovies = movies.filter(movie => !specificGenres.includes(movie.genre));
 
-        // Clean the titles from noise
-        const cleanTitles = uniqueTitles.map(title => {
+        // Extract unique movie titles after cleaning
+        const uniqueTitles = [...new Set(filteredMovies.map(movie => {
+            let title = movie.title.trim();
             // Remove leading numbers and spaces
             title = title.replace(/^\d+\s*/, '');
-            // Remove Cinestar prefixes
-            title = title.replace(/^Jeden \d+\.\s*/, '');
-            title = title.replace(/^CineLady-Preview/, '');
-            // Remove "(OV)" suffix
-            title = title.replace(/\(OV\)$/, '');
-            // Remove dates
-            title = title.replace(/^Am \d+\.\d+\.:\s*/, '');
-            // Remove other suffixes
-            title = title.replace(/–.*$/, '');
-            // Trim leading and trailing whitespace
-            title = title.trim();
+            // Clean the titles from "Neu:"
+            title = title.replace(/^Neu:\s*/, '');
             return title;
-        });
+        }))];
 
-        // Sort out duplicates and empty strings
-        const uniqueCleanTitles = cleanTitles.filter((title, index) => {
-            return (
-                title !== 'MEINE CineStarCARD' &&
-                title !== 'Passwort wiederherstellen' &&
-                title !== 'OV CineSneak: Surprise, Surprise!' &&
-                title !== 'Montag: CineSneak - die Überraschungspreview' &&
-                title !== '' &&
-                index === cleanTitles.indexOf(title)
-            );
-        });
+        // Sort the clean titles
+        uniqueTitles.sort();
 
-        uniqueCleanTitles.sort();
-        console.log(`Found ${uniqueCleanTitles.length} unique movie titles:\n${JSON.stringify(uniqueCleanTitles, null, 2)}`);
-        //console.log(uniqueCleanTitles);
+        console.log(`Found ${uniqueTitles.length} unique movie titles:\n${JSON.stringify(uniqueTitles, null, 2)}`);
+        //console.log(uniqueTitles);
 
         // Close the browser
         await browser.close();
