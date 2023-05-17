@@ -24,32 +24,42 @@ async function clickCookieButton(page) {
 }
 
 async function scrapeMovieTitles(page) {
-    // Define the sections to scrape
     const sections = ['Woche', 'Heute', 'Vorverkauf', 'TOP 10', 'Events', 'Vorschau'];
-
-    // Scrape the movie titles and genres for each section
     const movies = [];
+
     for (const section of sections) {
-        const [element] = await page.$x(`//span[contains(text(), "${section}")]`);
+        const element = await findSectionElement(page, section);
+
         if (element) {
             await element.click();
             await page.waitForSelector('.ShowTile');
-            const sectionMovies = await page.$$eval('.ShowTile', elements => {
-                return elements.map(element => {
-                    const titleElement = element.querySelector('.title');
-                    const genreElement = element.querySelector('small');
-                    const title = titleElement ? titleElement.textContent.trim() : '';
-                    const genre = genreElement ? genreElement.textContent.trim() : '';
-                    return { title, genre };
-                });
-            });
+            const sectionMovies = await scrapeSectionMovies(page);
             movies.push(...sectionMovies);
         } else {
             console.log(`Section "${section}" not found`);
         }
     }
+
     return movies;
 }
+
+async function findSectionElement(page, section) {
+    const [element] = await page.$x(`//span[contains(text(), "${section}")]`);
+    return element;
+}
+
+async function scrapeSectionMovies(page) {
+    return await page.$$eval('.ShowTile', elements => {
+        return elements.map(element => {
+            const titleElement = element.querySelector('.title');
+            const genreElement = element.querySelector('small');
+            const title = titleElement ? titleElement.textContent.trim() : '';
+            const genre = genreElement ? genreElement.textContent.trim() : '';
+            return {title, genre};
+        });
+    });
+}
+
 
 async function filterMoviesByGenre(movies) {
     // Filter movies by specific genres
