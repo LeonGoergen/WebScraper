@@ -156,24 +156,3 @@ class WebScraper {
         console.error(error);
     }
 })();
-
-/*
-// First Attempts to get movie rating from "The Whale"
-fetch('https://imdb-api.com/de/API/SearchMovie/k_x53sp327/The Whale',{method: 'GET', redirect: 'follow'})
-    .then(response => response.json())
-    .then(data => {
-        // Assuming the first result has the required IMDb ID
-        let imdbId = data.results[0].id;
-
-        // Step 2: Fetch ratings using the IMDb ID
-        fetch(`https://imdb-api.com/de/API/Ratings/k_x53sp327/${imdbId}`, {method: 'GET', redirect: 'follow'})
-            .then(response => response.json())
-            .then(ratingsData => {
-                // Process the ratings data as needed
-                console.log(ratingsData);
-            })
-            .catch(error => console.log('Error fetching ratings:', error));
-    })
-    .catch(error => console.log('Error searching movie:', error));
-
- */
