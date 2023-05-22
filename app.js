@@ -141,7 +141,10 @@ class WebScraper {
         const filteredMovies = WebScraper.filterMoviesByGenre(movies, specificGenres);
         const uniqueTitlesAndGenres = WebScraper.extractUniqueTitlesAndGenres(filteredMovies);
 
-        let apiKey = "k_3nmeydf9" // "k_x53sp327"
+        // api keys erlauben nur 100 Anfragen pro Tag, habe noch einen zweiten hinzugefügt
+        let apiKey = "k_3nmeydf9"
+        // let apiKey = "k_x53sp327"
+
         for (let movie of uniqueTitlesAndGenres) {
             console.log("Get ratings for: " + movie.title)
             const ratings = await scraper.getMovieRatings(movie.title, apiKey, "de");
