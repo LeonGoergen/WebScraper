@@ -16,6 +16,7 @@ app.listen(port, () => {
 
 // Webscraper
 const puppeteer = require('puppeteer');
+const axios = require('axios');
 
 class WebScraper {
     constructor(url, headless = true, slowMo = 0) {
@@ -102,14 +103,14 @@ class WebScraper {
 
     async getMovieRatings(movies, apiKey, language) {
         for (let movie of movies) {
-            console.log("Get Rating for: " + movie.title);
+            console.log("Get Rating for: '" + movie.title + "'");
             try {
-                const searchResponse = await fetch(`https://imdb-api.com/${language}/API/SearchMovie/${apiKey}/${encodeURIComponent(movie.title)}`, {method: 'GET', redirect: 'follow'});
-                const searchData = await searchResponse.json();
+                const searchResponse = await axios.get(`https://imdb-api.com/${language}/API/SearchMovie/${apiKey}/${encodeURIComponent(movie.title)}`);
+                const searchData = searchResponse.data;
                 const imdbId = searchData.results[0].id;
 
-                const ratingsResponse = await fetch(`https://imdb-api.com/${language}/API/Ratings/${apiKey}/${imdbId}`, {method: 'GET', redirect: 'follow'});
-                const ratingsData = await ratingsResponse.json();
+                const ratingsResponse = await axios.get(`https://imdb-api.com/${language}/API/Ratings/${apiKey}/${imdbId}`);
+                const ratingsData = ratingsResponse.data;
                 console.log(ratingsData);
 
                 movie.imdbRating = ratingsData.imDb;
@@ -146,8 +147,8 @@ class WebScraper {
         const uniqueTitlesAndGenres = WebScraper.extractUniqueTitlesAndGenres(filteredMovies);
 
         // api keys erlauben nur 100 Anfragen pro Tag, habe noch einen zweiten hinzugefügt
-        // let apiKey = "k_3nmeydf9"
-        let apiKey = "k_x53sp327"
+        let apiKey = "k_3nmeydf9"
+        // let apiKey = "k_x53sp327"
 
         const moviesWithRatings = await scraper.getMovieRatings(uniqueTitlesAndGenres, apiKey, "de");
 
