@@ -100,24 +100,28 @@ class WebScraper {
         return uniqueMovies;
     }
 
-    async getMovieRatings(movieTitle, key, lang) {
-        try {
-            const searchResponse = await fetch(`https://imdb-api.com/${lang}/API/SearchMovie/${key}/${encodeURIComponent(movieTitle)}`, {method: 'GET', redirect: 'follow'});
-            const searchData = await searchResponse.json();
-            const imdbId = searchData.results[0].id;
+    async getMovieRatings(movies, apiKey, language) {
+        for (let movie of movies) {
+            console.log("Get Rating for: " + movie.title);
+            try {
+                const searchResponse = await fetch(`https://imdb-api.com/${language}/API/SearchMovie/${apiKey}/${encodeURIComponent(movie.title)}`, {method: 'GET', redirect: 'follow'});
+                const searchData = await searchResponse.json();
+                const imdbId = searchData.results[0].id;
 
-            const ratingsResponse = await fetch(`https://imdb-api.com/${lang}/API/Ratings/${key}/${imdbId}`, {method: 'GET', redirect: 'follow'});
-            const ratingsData = await ratingsResponse.json();
+                const ratingsResponse = await fetch(`https://imdb-api.com/${language}/API/Ratings/${apiKey}/${imdbId}`, {method: 'GET', redirect: 'follow'});
+                const ratingsData = await ratingsResponse.json();
+                console.log(ratingsData);
 
-            console.log(ratingsData);
-
-            return {
-                imdbRating: ratingsData.imDb,
-                rottenTomatoesRating: ratingsData.rottenTomatoes
-            };
-        } catch (error) {
-            console.error(`Error fetching ratings for movie "${movieTitle}":`, error);
+                movie.imdbRating = ratingsData.imDb;
+                movie.rottenTomatoesRating = ratingsData.rottenTomatoes;
+            } catch (error) {
+                console.error(`Error fetching ratings for movie "${movie.title}":`, error);
+                movie.imdbRating = "N/A";
+                movie.rottenTomatoesRating = "N/A";
+            }
         }
+
+        return movies;
     }
 
     async closeBrowser() {
@@ -142,17 +146,12 @@ class WebScraper {
         const uniqueTitlesAndGenres = WebScraper.extractUniqueTitlesAndGenres(filteredMovies);
 
         // api keys erlauben nur 100 Anfragen pro Tag, habe noch einen zweiten hinzugefügt
-        let apiKey = "k_3nmeydf9"
-        // let apiKey = "k_x53sp327"
+        // let apiKey = "k_3nmeydf9"
+        let apiKey = "k_x53sp327"
 
-        for (let movie of uniqueTitlesAndGenres) {
-            console.log("Get ratings for: " + movie.title)
-            const ratings = await scraper.getMovieRatings(movie.title, apiKey, "de");
-            movie.imdbRating = ratings.imdbRating;
-            movie.rottenTomatoesRating = ratings.rottenTomatoesRating;
-        }
+        const moviesWithRatings = await scraper.getMovieRatings(uniqueTitlesAndGenres, apiKey, "de");
 
-        console.log(`Found ${uniqueTitlesAndGenres.length} unique movies:\n${JSON.stringify(uniqueTitlesAndGenres, null, 2)}`);
+        console.log(`Found ${moviesWithRatings.length} unique movies:\n${JSON.stringify(moviesWithRatings, null, 2)}`);
 
         await scraper.closeBrowser();
     } catch (error) {
