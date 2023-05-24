@@ -136,7 +136,7 @@ class WebScraper {
         const specificGenres = ['Event', 'Live-Übertragung', 'Sondervorstellung', 'Vorpremiere'];
         const url = 'https://www.cinestar.de/kino-rostock-capitol#Kinoprogramm';
 
-        const scraper = new WebScraper(url, false, 5);
+        const scraper = new WebScraper(url, false, 0);
         await scraper.launchBrowser();
         await scraper.openPage();
         await scraper.navigateToWebsite();
@@ -147,8 +147,9 @@ class WebScraper {
         const uniqueTitlesAndGenres = WebScraper.extractUniqueTitlesAndGenres(filteredMovies);
 
         // api keys erlauben nur 100 Anfragen pro Tag, habe noch einen zweiten hinzugefügt
-        let apiKey = "k_3nmeydf9"
-        // let apiKey = "k_x53sp327"
+        // let apiKey = "k_3nmeydf9";
+        // let apiKey = "k_x53sp327";
+        let apiKey = "k_esxidu8j";
 
         const moviesWithRatings = await scraper.getMovieRatings(uniqueTitlesAndGenres, apiKey, "de");
 
