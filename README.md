@@ -27,7 +27,17 @@ AP4/5: API Services: Nachdem die neuen Filme identifiziert wurden, werden mittel
 7.6. :Ansprechende Gestaltung der Posts\
 14.6.:Puffer, Anpassungen, etc.
 
-# Push neuer Inhalte
+## Twitter Service
+Twitter Service kann wie folgt genutzt und eingebunden werden:
+
+```js
+import { ServiceTwitter } from "./service-twitter.js";
+
+const twitter=new ServiceTwitter;
+console.log(await twitter.postTweet("TEST"))
+```
+
+Tokens und Secret, aus Discord in secret.js kopieren.
 
 ## How to git
 
