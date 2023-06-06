@@ -1,122 +1,54 @@
 [
-  {
-    "title": "Arielle, die Meerjungfrau",
-    "genre": "Fantasy",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
-  },
-  {
-    "title": "Book Club - Ein neues Kapitel",
-    "genre": "",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
-  },
-  {
-    "title": "Das Lehrerzimmer",
-    "genre": "Drama",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
-  },
-  {
-    "title": "Der Super Mario Bros. Film",
-    "genre": "Trickfilm",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
-  },
-  {
+    {
     "title": "Elemental",
-    "genre": "",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": ""
   },
   {
     "title": "Fast & Furious 10",
-    "genre": "Action",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": "Action"
   },
   {
     "title": "Greatest Days",
-    "genre": "",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": ""
   },
   {
     "title": "Guardians of the Galaxy: Volume 3",
-    "genre": "Action",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": "Action"
   },
   {
     "title": "Indiana Jones und das Rad des Schicksals",
-    "genre": "",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": "Abenteuer"
   },
   {
     "title": "Meine Freundin Conni - Geheimnis um Kater Mau",
-    "genre": "",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": ""
   },
   {
     "title": "Miraculous: Ladybug & Cat Noir - Der Film",
-    "genre": "",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": ""
   },
   {
     "title": "Mission: Impossible - Dead Reckoning Teil Eins",
-    "genre": "",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": ""
   },
   {
     "title": "Mumien - Ein total verwickeltes Abenteuer",
-    "genre": "Abenteuer",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": "Abenteuer"
   },
   {
     "title": "No Hard Feelings",
-    "genre": "",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
-  },
-  {
-    "title": "Spider-Man: Across the Spider-Verse",
-    "genre": "Action",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
-  },
-  {
-    "title": "Sword Art Online the Movie: Progressive - Aria of a Starless Night",
-    "genre": "",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
-  },
-  {
-    "title": "Sword Art Online the Movie: Progressive - Scherzo of Deep Night",
-    "genre": "",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": ""
   },
   {
     "title": "The Flash",
-    "genre": "",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": ""
   },
   {
     "title": "Transformers: Aufstieg der Bestien",
-    "genre": "Action",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": "Action"
   },
   {
     "title": "Überflieger: Das Geheimnis des großen Juwels",
-    "genre": "Kinderfilm",
-    "imdbRating": "N/A",
-    "rottenTomatoesRating": "N/A"
+    "genre": "Kinderfilm"
   }
 ]

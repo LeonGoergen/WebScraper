@@ -104,9 +104,9 @@ class WebScraper {
 
     async getMovieRatings(movies, apiKey, language) {
         for (let movie of movies) {
-            console.log("Get Rating for: '" + movie.title + "'");
+            console.log("Get Rating for: '" + movie + "'");
             try {
-                const searchResponse = await axios.get(`https://imdb-api.com/${language}/API/SearchMovie/${apiKey}/${encodeURIComponent(movie.title)}`);
+                const searchResponse = await axios.get(`https://imdb-api.com/${language}/API/SearchMovie/${apiKey}/${encodeURIComponent(movie)}`);
                 const searchData = searchResponse.data;
                 const imdbId = searchData.results[0].id;
 
@@ -117,7 +117,7 @@ class WebScraper {
                 movie.imdbRating = ratingsData.imDb;
                 movie.rottenTomatoesRating = ratingsData.rottenTomatoes;
             } catch (error) {
-                console.error(`Error fetching ratings for movie "${movie.title}":`, error);
+                console.error(`Error fetching ratings for movie "${movie}":`, error);
                 movie.imdbRating = "N/A";
                 movie.rottenTomatoesRating = "N/A";
             }
@@ -146,16 +146,53 @@ function getnewMovies(currentMovies) {
     try {
         if (typeof oldMovies !== 'object' || typeof currentMovies !== 'object') {
             return false;
-        }
-        const keys1 = Object.keys(oldMovies);
-        const keys2 = Object.keys(currentMovies);
+        }   
+       
+        const newMovies = [];
+        const currentMovieList = [];
+        const oldMovieList = [];
 
-        for (let key of keys2) {
-            if (!oldMovies.hasOwnProperty(key)) {
-                newMovies.push(currentMovies[key]);
+      
+        for (let i = 0; i < currentMovies.length; i++) {          
+            const obj2 = currentMovies[i];
+            const keys = Object.keys(obj2);
+
+           
+
+            for (let key of keys) {
+                
+                if (key != "genre") {
+
+                    currentMovieList.push(obj2[key]);
+                    // console.log("current Movie:" + obj2[key])
+                }
             }
         }
-        console.log(newMovies)
+        
+         for (let i = 0; i < oldMovies.length; i++) {           
+            const obj2 = oldMovies[i];            
+            const keys = Object.keys(obj2);       
+
+            for (let key of keys) {
+                
+                if (key != "genre") {
+
+                    oldMovieList.push(obj2[key]);
+                    // console.log("old Movie:" + obj2[key])
+                }
+            }
+        }
+        //console.log(currentMovieList + "+" + oldMovieList)
+        for (movie in currentMovieList ) {
+            if (oldMovieList.includes(currentMovieList[movie]))
+            {
+                continue
+            }
+            else {
+                newMovies.push(currentMovieList[movie]);
+            }
+        }
+
         return newMovies;
     } catch (error) {
         console.error(error);
@@ -180,14 +217,14 @@ function getnewMovies(currentMovies) {
         const uniqueTitlesAndGenres = WebScraper.extractUniqueTitlesAndGenres(filteredMovies);
 
         // api keys erlauben nur 100 Anfragen pro Tag, habe noch einen zweiten hinzugefügt
-        // let apiKey = "k_3nmeydf9";
-        // let apiKey = "k_x53sp327";
-        let apiKey = "k_esxidu8j";
+        let apiKey;
+        apiKey = "k_3nmeydf9";
+        // apiKey = "k_x53sp327";
+        // apiKey = "k_esxidu8j";
 
 
-        const moviesWithRatings = await scraper.getMovieRatings(uniqueTitlesAndGenres, apiKey, "de");
+        // const moviesWithRatings = await scraper.getMovieRatings(uniqueTitlesAndGenres, apiKey, "de");
 
-        console.log(`Found ${moviesWithRatings.length} unique movies:\n${JSON.stringify(moviesWithRatings, null, 2)}`);
 
 
         // Compare movie_list.json and uniqueTitlesAndGenres, saved var newMovies 
@@ -201,16 +238,27 @@ function getnewMovies(currentMovies) {
             movie_list = JSON.stringify(movie_list, null, 2)
         } catch (error) {
             console.error(error);
-        }       
+        }
+
+        // Only write to Json if new movies found
+        if (false) {
+
+            fs.writeFile("movie_list.json", movie_list, (error) => {
+                if (error) {
+                    console.error(error);
+                    throw error;
+                }
+
+            });
+        }
 
 
-        fs.writeFile("movie_list.json", movie_list, (error) => {
-            if (error) {
-                console.error(error);
-                throw error;
-            }
-
-        });
+         try {
+            const moviesWithRatings = await scraper.getMovieRatings(newMovies, apiKey, "de");
+            console.log(`Found ${moviesWithRatings.length} unique movies:\n${JSON.stringify(moviesWithRatings, null, 2)}`);
+         } catch (error) {
+            
+         }
 
         // Here goes the API Twitter and Instagram calls 
 
