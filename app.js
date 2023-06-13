@@ -1,9 +1,15 @@
+import { createRequire } from 'module';
+import * as ServiceTwitter from "./service-twitter.js"
+const require = createRequire(import.meta.url);
 
 // Express Server
 const express = require('express')
 const app = express();
 const hostname = "0.0.0.0";
 const port = 3000;
+
+// Twitter API
+
 
 app.get("/", (req, res) => {
     res.send("Cinema Notifications");
@@ -18,6 +24,7 @@ app.listen(port, () => {
 const puppeteer = require('puppeteer');
 const axios = require('axios');
 const fs = require("fs");
+
 
 class WebScraper {
     constructor(url, headless = true, slowMo = 0) {
@@ -108,6 +115,7 @@ class WebScraper {
             try {
                 const searchResponse = await axios.get(`https://imdb-api.com/${language}/API/SearchMovie/${apiKey}/${encodeURIComponent(movie)}`);
                 const searchData = searchResponse.data;
+                console.log(searchData)
                 const imdbId = searchData.results[0].id;
 
                 const ratingsResponse = await axios.get(`https://imdb-api.com/${language}/API/Ratings/${apiKey}/${imdbId}`);
@@ -183,7 +191,7 @@ function getnewMovies(currentMovies) {
             }
         }
         //console.log(currentMovieList + "+" + oldMovieList)
-        for (movie in currentMovieList ) {
+        for (let movie in currentMovieList ) {
             if (oldMovieList.includes(currentMovieList[movie]))
             {
                 continue
@@ -202,7 +210,8 @@ function getnewMovies(currentMovies) {
 
 (async () => {
     try {
-        const sections = ['Woche', 'Heute', 'Vorverkauf', 'TOP 10', 'Events', 'Vorschau'];
+        //const sections = ['Woche', 'Heute', 'Vorverkauf', 'TOP 10', 'Events', 'Vorschau'];
+        const sections = ['Woche', 'Heute', 'Vorverkauf',  'Events', 'Vorschau'];
         const specificGenres = ['Event', 'Live-Übertragung', 'Sondervorstellung', 'Vorpremiere'];
         const url = 'https://www.cinestar.de/kino-rostock-capitol#Kinoprogramm';
 
@@ -211,16 +220,18 @@ function getnewMovies(currentMovies) {
         await scraper.openPage();
         await scraper.navigateToWebsite();
         await scraper.clickCookieButton();
+        
 
         const movies = await scraper.scrapeMoviesFromSections(sections);
+        await scraper.closeBrowser();
         const filteredMovies = WebScraper.filterMoviesByGenre(movies, specificGenres);
         const uniqueTitlesAndGenres = WebScraper.extractUniqueTitlesAndGenres(filteredMovies);
 
         // api keys erlauben nur 100 Anfragen pro Tag, habe noch einen zweiten hinzugefügt
-        let apiKey;
-        apiKey = "k_3nmeydf9";
-        // apiKey = "k_x53sp327";
-        // apiKey = "k_esxidu8j";
+        
+        //let apiKey = "k_3nmeydf9";
+        //let apiKey = "k_x53sp327";
+        let apiKey = "k_esxidu8j";
 
 
         // const moviesWithRatings = await scraper.getMovieRatings(uniqueTitlesAndGenres, apiKey, "de");
@@ -231,10 +242,11 @@ function getnewMovies(currentMovies) {
 
         try {
             var movie_list = []
-            for (movie in uniqueTitlesAndGenres) {
+            for (let movie in uniqueTitlesAndGenres) {
                 movie_list.push(uniqueTitlesAndGenres[movie])
             }
-            newMovies = getnewMovies(movie_list);
+            var newMovies = getnewMovies(movie_list);
+            console.log(newMovies)
             movie_list = JSON.stringify(movie_list, null, 2)
         } catch (error) {
             console.error(error);
@@ -254,15 +266,21 @@ function getnewMovies(currentMovies) {
 
 
          try {
-            const moviesWithRatings = await scraper.getMovieRatings(newMovies, apiKey, "de");
-            console.log(`Found ${moviesWithRatings.length} unique movies:\n${JSON.stringify(moviesWithRatings, null, 2)}`);
+            //const moviesWithRatings = await scraper.getMovieRatings(newMovies, apiKey, "de");
+            //console.log(`Found ${moviesWithRatings.length} unique movies:\n${JSON.stringify(moviesWithRatings, null, 2)}`);
          } catch (error) {
             
          }
 
         // Here goes the API Twitter and Instagram calls 
-
-        await scraper.closeBrowser();
+        // How da fck do i tweet ?
+        try {
+           const Tweet = new ServiceTwitter.ServiceTwitter
+           Tweet.postTweet(newMovies[0])
+        } catch (error) {
+            console.error(error);
+        }
+        
     } catch (error) {
         console.error(error);
     }
