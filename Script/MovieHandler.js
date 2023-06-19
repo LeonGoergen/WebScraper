@@ -1,6 +1,6 @@
 import fs from 'fs';
 
-export class MovieListHandler {
+export class MovieHandler {
     constructor() {
         this.pathToFile = './movie_list.json';
     }

@@ -1,28 +1,28 @@
 import {WebScraper} from "./WebScraper.js";
-import {MovieListHandler} from "./MovieListHandler.js";
-import {SocialMediaManager} from "./SocialMediaManager.js";
+import {MovieHandler} from "./MovieHandler.js";
+import {ApiManager} from "./ApiManager.js";
 
 (async () => {
     try {
         const sections = ['Woche', 'Heute', 'TOP10', 'Vorverkauf',  'Events', 'Vorschau'];
         const specificGenres = ['Event', 'Live-Übertragung', 'Sondervorstellung', 'Vorpremiere'];
         const url = 'https://www.cinestar.de/kino-rostock-capitol#Kinoprogramm';
+        const apiKey = "k_r5zmhtbn";
 
         const scraper = new WebScraper(url, false, 0);
         const movies = await scraper.getMoviesFromWebsite(sections);
 
-        const movieListHandler = new MovieListHandler();
-        const newMovies = await movieListHandler.handleMovieList(movies, specificGenres);
+        const movieHandler = new MovieHandler();
+        const newMovies = await movieHandler.handleMovieList(movies, specificGenres);
 
-        //const apiKey = "k_3nmeydf9";
-        //const apiKey = "k_x53sp327";
-        //const apiKey = "k_esxidu8j";
-        //const apiKey = "k_yd9yt8yz";
-        const apiKey = "k_r5zmhtbn";
-        const moviesWithRatings = await scraper.getMovieRatings(newMovies, apiKey, "de");
-
-        const socialMediaManager = new SocialMediaManager();
-        await socialMediaManager.postToSocialMedia(moviesWithRatings);
+        if (newMovies.length === 0) {
+            console.log('No new movies found');
+            return;
+        }
+        const apiManager = new ApiManager();
+        const moviesWithRatings = await apiManager.getMovieRatings(newMovies, apiKey, "de");
+        await apiManager.postToSocialMedia(moviesWithRatings);
+        
     } catch (error) {
         console.error(error);
     }

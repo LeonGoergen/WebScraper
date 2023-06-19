@@ -68,30 +68,6 @@ export class WebScraper {
         });
     }
 
-    async getMovieRatings(movies, apiKey, language) {
-        let moviesWithRatings = [];
-        for (let movie of movies) {
-            console.log("Get Rating for: '" + movie.title + "'...");
-            try {
-                const searchResponse = await axios.get(`https://imdb-api.com/${language}/API/SearchMovie/${apiKey}/${encodeURIComponent(movie.title)}`);
-                const searchData = searchResponse.data;
-                const imdbId = searchData.results[0].id;
-                const ratingsResponse = await axios.get(`https://imdb-api.com/${language}/API/Ratings/${apiKey}/${imdbId}`);
-                const ratingsData = ratingsResponse.data;
-                console.log(ratingsData);
-
-                let imdbRating = ratingsData.imDb;
-                let rottenTomatoesRating = ratingsData.rottenTomatoes;
-                moviesWithRatings.push({ title: movie.title, imdb: imdbRating, rotten: rottenTomatoesRating });
-            } catch (error) {
-                console.error(`Error fetching ratings for movie "${movie.title}":`, error);
-                movie.imdbRating = "N/A";
-                movie.rottenTomatoesRating = "N/A";
-            }
-        }
-        return moviesWithRatings;
-    }
-
     async closeBrowser() {
         await this.browser.close();
     }
