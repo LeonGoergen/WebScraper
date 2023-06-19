@@ -28,7 +28,7 @@ export class SocialMediaManager {
     async postToSocialMedia(moviesWithRatings) {
         for (let movie of moviesWithRatings) {
             console.log(`Try to post new movie "${movie.title}" with IMDB rating: ${movie.imdb}, Rotten Tomatoes rating: ${movie.rotten}`);
-            //await this.postToTwitter(movie);
+            await this.postToTwitter(movie);
             //await this.postToInsta(movie);
         }
     }

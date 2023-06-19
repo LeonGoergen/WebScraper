@@ -34,12 +34,18 @@ export class WebScraper {
         for (const section of sections) {
             const element = await this.findSectionElement(section);
             if (element) {
-                await element.click();
-                await this.page.waitForSelector('.ShowTile');
-                const sectionMovies = await this.scrapeMoviesFromSection();
-                movies.push(...sectionMovies);
+                console.log(`Scraping section "${section}"...`);
+                try {
+                    await element.click();
+                    await this.page.waitForSelector('.ShowTile');
+                    const sectionMovies = await this.scrapeMoviesFromSection();
+                    movies.push(...sectionMovies);
+                    console.log(`Scraped ${sectionMovies.length} movies\n`)
+                } catch (error) {
+                    console.log(`Error while scraping section "${section}"\n`);
+                }
             } else {
-                console.log(`Section "${section}" not found`);
+                console.log(`Section "${section}" not found\n`);
             }
         }
         return movies;
@@ -62,32 +68,12 @@ export class WebScraper {
         });
     }
 
-    static filterMoviesByGenre(movies, genresToExclude) {
-        return movies.filter(movie => !genresToExclude.includes(movie.genre));
-    }
-
-    static extractUniqueTitlesAndGenres(filteredMovies) {
-        const uniqueMovies = filteredMovies.reduce((acc, movie) => {
-            let title = movie.title.trim().replace(/^\d+\s*/, '').replace(/^Neu:\s*/, '');
-
-            const existingMovie = acc.find(m => m.title === title);
-            if (!existingMovie) {
-                acc.push({ title, genre: movie.genre });
-            }
-            return acc;
-        }, []);
-
-        uniqueMovies.sort((a, b) => a.title.localeCompare(b.title));
-
-        return uniqueMovies;
-    }
-
     async getMovieRatings(movies, apiKey, language) {
         let moviesWithRatings = [];
         for (let movie of movies) {
-            console.log("Get Rating for: '" + movie + "'");
+            console.log("Get Rating for: '" + movie.title + "'...");
             try {
-                const searchResponse = await axios.get(`https://imdb-api.com/${language}/API/SearchMovie/${apiKey}/${encodeURIComponent(movie)}`);
+                const searchResponse = await axios.get(`https://imdb-api.com/${language}/API/SearchMovie/${apiKey}/${encodeURIComponent(movie.title)}`);
                 const searchData = searchResponse.data;
                 const imdbId = searchData.results[0].id;
                 const ratingsResponse = await axios.get(`https://imdb-api.com/${language}/API/Ratings/${apiKey}/${imdbId}`);
@@ -96,9 +82,9 @@ export class WebScraper {
 
                 let imdbRating = ratingsData.imDb;
                 let rottenTomatoesRating = ratingsData.rottenTomatoes;
-                moviesWithRatings.push({ title: movie, imdb: imdbRating, rotten: rottenTomatoesRating });
+                moviesWithRatings.push({ title: movie.title, imdb: imdbRating, rotten: rottenTomatoesRating });
             } catch (error) {
-                console.error(`Error fetching ratings for movie "${movie}":`, error);
+                console.error(`Error fetching ratings for movie "${movie.title}":`, error);
                 movie.imdbRating = "N/A";
                 movie.rottenTomatoesRating = "N/A";
             }
@@ -110,7 +96,7 @@ export class WebScraper {
         await this.browser.close();
     }
 
-    async getMoviesFromWebsite(sections, specificGenres) {
+    async getMoviesFromWebsite(sections) {
         await this.launchBrowser();
         await this.openPage();
         await this.navigateToWebsite();
@@ -118,7 +104,6 @@ export class WebScraper {
 
         const movies = await this.scrapeMoviesFromSections(sections);
         await this.closeBrowser();
-        const filteredMovies = WebScraper.filterMoviesByGenre(movies, specificGenres);
-        return WebScraper.extractUniqueTitlesAndGenres(filteredMovies);
+        return movies;
     }
 }
