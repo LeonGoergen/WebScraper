@@ -6,7 +6,7 @@ services:
         image: app
         restart: always
         build:
-            context: .
+            context: ..
             dockerfile: Dockerfile
             target: base
         ports:

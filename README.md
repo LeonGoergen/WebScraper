@@ -31,10 +31,15 @@ AP4/5: API Services: Nachdem die neuen Filme identifiziert wurden, werden mittel
 Twitter Service kann wie folgt genutzt und eingebunden werden:
 
 ```js
-import { ServiceTwitter } from "./service-twitter.js";
+import {ServiceTwitter} from "./serviceTwitter.js";
 
-const twitter=new ServiceTwitter;
-console.log(await twitter.postTweet({"title": "Der Pate","genre": "Krimi", "imdbRating": "9,2", "rottenTomatoesRating":"97%"}))
+const twitter = new ServiceTwitter;
+console.log(await twitter.postTweet({
+    "title": "Der Pate",
+    "genre": "Krimi",
+    "imdbRating": "9,2",
+    "rottenTomatoesRating": "97%"
+}))
 ```
 
 Tokens und Secret, aus Discord in secret.js kopieren.

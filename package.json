@@ -1,7 +1,7 @@
 {
   "name": "web20-2023",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "Script/Main.js",
   "type": "module",
   "dependencies": {
     "axios": "^1.4.0",

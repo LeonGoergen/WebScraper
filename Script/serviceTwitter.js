@@ -30,10 +30,9 @@ export class ServiceTwitter {
         }
     }
     makeTweet(movieObjekt) {
-        var data = JSON.stringify({
+        return JSON.stringify({
             "text": `Jetzt neu zu sehen: ${movieObjekt.title}! \nDas sagen Andere: \nImdb: ${movieObjekt.imdb} \nRottenTomatoes: ${movieObjekt.rotten}\n #test`
-        });
-        return data
+        })
     }
     getUrl() {
         return "https://api.twitter.com/2/tweets"
