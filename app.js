@@ -150,8 +150,6 @@ function getnewMovies(currentMovies) {
         throw error;
     }
     oldMovies = JSON.parse(oldMovies);
-    //console.log("New Movies" + typeof oldMovies)
-    //console.log("Current : " + typeof currentMovies)
 
     try {
         if (typeof oldMovies !== 'object' || typeof currentMovies !== 'object') {
@@ -162,12 +160,9 @@ function getnewMovies(currentMovies) {
         const currentMovieList = [];
         const oldMovieList = [];
 
-
         for (let i = 0; i < currentMovies.length; i++) {
             const obj2 = currentMovies[i];
             const keys = Object.keys(obj2);
-
-
 
             for (let key of keys) {
 
@@ -202,7 +197,6 @@ function getnewMovies(currentMovies) {
                 newMovies.push(currentMovieList[movie]);
             }
         }
-
         return newMovies;
     } catch (error) {
         console.error(error);
@@ -223,7 +217,6 @@ function getnewMovies(currentMovies) {
         await scraper.navigateToWebsite();
         await scraper.clickCookieButton();
 
-
         const movies = await scraper.scrapeMoviesFromSections(sections);
         await scraper.closeBrowser();
         const filteredMovies = WebScraper.filterMoviesByGenre(movies, specificGenres);
@@ -234,7 +227,8 @@ function getnewMovies(currentMovies) {
         //let apiKey = "k_3nmeydf9";
         //let apiKey = "k_x53sp327";
         //let apiKey = "k_esxidu8j";
-        let apiKey = "k_yd9yt8yz";
+        //let apiKey = "k_yd9yt8yz";
+        let apiKey = "k_r5zmhtbn";
 
         // Compare movie_list.json and uniqueTitlesAndGenres, saved var newMovies
         try {
@@ -249,22 +243,16 @@ function getnewMovies(currentMovies) {
         }
 
         // Only write to Json if new movies found
-        if (false) {
-
-            fs.writeFile("movie_list.json", movie_list, (error) => {
-                if (error) {
-                    console.error(error);
-                    throw error;
-                }
-            });
-        }
+        fs.writeFile("movie_list.json", movie_list, (error) => {
+            if (error) {
+                console.error(error);
+                throw error;
+            }
+        });
 
         let moviesWithRatings = await scraper.getMovieRatings(newMovies, apiKey, "de");
-        //---------------------------------------------
 
         // Here goes the API Twitter and Instagram calls
-        // How da fck do i tweet ?
-        console.log(moviesWithRatings[0]);
         try {
             const Tweet = new ServiceTwitter;
             await Tweet.postTweet(moviesWithRatings[0])
@@ -279,8 +267,6 @@ function getnewMovies(currentMovies) {
              errorHandler(error,"instagram");
          }
         */
-
-
     } catch (error) {
         console.error(error);
     }
