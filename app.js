@@ -4,6 +4,7 @@ import { errorHandler } from './errorhandler.js';
 import { ServiceInstagram } from './service-insta.js';
 const require = createRequire(import.meta.url);
 
+/*
 // Express Server
 const express = require('express')
 const app = express();
@@ -20,7 +21,7 @@ app.get("/", (req, res) => {
 app.listen(port, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
 });
-
+*/
 
 // Webscraper
 const puppeteer = require('puppeteer');
@@ -112,28 +113,27 @@ class WebScraper {
     }
 
     async getMovieRatings(movies, apiKey, language) {
+        let moviesWithRatings = [];
         for (let movie of movies) {
             console.log("Get Rating for: '" + movie + "'");
             try {
                 const searchResponse = await axios.get(`https://imdb-api.com/${language}/API/SearchMovie/${apiKey}/${encodeURIComponent(movie)}`);
                 const searchData = searchResponse.data;
-                console.log(searchData)
                 const imdbId = searchData.results[0].id;
-
                 const ratingsResponse = await axios.get(`https://imdb-api.com/${language}/API/Ratings/${apiKey}/${imdbId}`);
                 const ratingsData = ratingsResponse.data;
                 console.log(ratingsData);
 
-                movie.imdbRating = ratingsData.imDb;
-                movie.rottenTomatoesRating = ratingsData.rottenTomatoes;
+                let imdbRating = ratingsData.imDb;
+                let rottenTomatoesRating = ratingsData.rottenTomatoes;
+                moviesWithRatings.push({ title: movie, imdb: imdbRating, rotten: rottenTomatoesRating });
             } catch (error) {
                 console.error(`Error fetching ratings for movie "${movie}":`, error);
                 movie.imdbRating = "N/A";
                 movie.rottenTomatoesRating = "N/A";
             }
         }
-
-        return movies;
+        return moviesWithRatings;
     }
 
     async closeBrowser() {
@@ -156,21 +156,21 @@ function getnewMovies(currentMovies) {
     try {
         if (typeof oldMovies !== 'object' || typeof currentMovies !== 'object') {
             return false;
-        }   
-       
+        }
+
         const newMovies = [];
         const currentMovieList = [];
         const oldMovieList = [];
 
-      
-        for (let i = 0; i < currentMovies.length; i++) {          
+
+        for (let i = 0; i < currentMovies.length; i++) {
             const obj2 = currentMovies[i];
             const keys = Object.keys(obj2);
 
-           
+
 
             for (let key of keys) {
-                
+
                 if (key != "genre") {
 
                     currentMovieList.push(obj2[key]);
@@ -178,13 +178,13 @@ function getnewMovies(currentMovies) {
                 }
             }
         }
-        
-         for (let i = 0; i < oldMovies.length; i++) {           
-            const obj2 = oldMovies[i];            
-            const keys = Object.keys(obj2);       
+
+        for (let i = 0; i < oldMovies.length; i++) {
+            const obj2 = oldMovies[i];
+            const keys = Object.keys(obj2);
 
             for (let key of keys) {
-                
+
                 if (key != "genre") {
 
                     oldMovieList.push(obj2[key]);
@@ -222,7 +222,7 @@ function getnewMovies(currentMovies) {
         await scraper.openPage();
         await scraper.navigateToWebsite();
         await scraper.clickCookieButton();
-        
+
 
         const movies = await scraper.scrapeMoviesFromSections(sections);
         await scraper.closeBrowser();
@@ -230,25 +230,19 @@ function getnewMovies(currentMovies) {
         const uniqueTitlesAndGenres = WebScraper.extractUniqueTitlesAndGenres(filteredMovies);
 
         // api keys erlauben nur 100 Anfragen pro Tag, habe noch einen zweiten hinzugefügt
-        
+
         //let apiKey = "k_3nmeydf9";
         //let apiKey = "k_x53sp327";
-        let apiKey = "k_esxidu8j";
+        //let apiKey = "k_esxidu8j";
+        let apiKey = "k_yd9yt8yz";
 
-
-        // const moviesWithRatings = await scraper.getMovieRatings(uniqueTitlesAndGenres, apiKey, "de");
-
-
-
-        // Compare movie_list.json and uniqueTitlesAndGenres, saved var newMovies 
-
+        // Compare movie_list.json and uniqueTitlesAndGenres, saved var newMovies
         try {
             var movie_list = []
             for (let movie in uniqueTitlesAndGenres) {
                 movie_list.push(uniqueTitlesAndGenres[movie])
             }
             var newMovies = getnewMovies(movie_list);
-            console.log(newMovies)
             movie_list = JSON.stringify(movie_list, null, 2)
         } catch (error) {
             console.error(error);
@@ -262,27 +256,22 @@ function getnewMovies(currentMovies) {
                     console.error(error);
                     throw error;
                 }
-
             });
         }
 
+        let moviesWithRatings = await scraper.getMovieRatings(newMovies, apiKey, "de");
+        //---------------------------------------------
 
-         try {
-            //const moviesWithRatings = await scraper.getMovieRatings(newMovies, apiKey, "de");
-            //console.log(`Found ${moviesWithRatings.length} unique movies:\n${JSON.stringify(moviesWithRatings, null, 2)}`);
-         } catch (error) {
-            
-         }
-
-        // Here goes the API Twitter and Instagram calls 
+        // Here goes the API Twitter and Instagram calls
         // How da fck do i tweet ?
+        console.log(moviesWithRatings[0]);
         try {
-           const Tweet = new ServiceTwitter
-           await Tweet.postTweet(newMovies[0])
+            const Tweet = new ServiceTwitter;
+            await Tweet.postTweet(moviesWithRatings[0])
         } catch (error) {
             errorHandler(error,"twitter");
         }
-        /* 
+        /*
         try {
             const InstaPost = new ServiceInstagram
             await InstaPost.uploadMedia(newMovies[0])
@@ -291,7 +280,7 @@ function getnewMovies(currentMovies) {
          }
         */
 
-        
+
     } catch (error) {
         console.error(error);
     }

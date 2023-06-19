@@ -1,15 +1,31 @@
 [
-    {
-    "title": "Elemental",
+  {
+    "title": "Arielle, die Meerjungfrau",
+    "genre": "Fantasy"
+  },
+  {
+    "title": "Barbie",
     "genre": ""
   },
   {
-    "title": "Fast & Furious 10",
-    "genre": "Action"
+    "title": "CineSneak - Die Überraschungspreview",
+    "genre": "Sneak"
+  },
+  {
+    "title": "Der Super Mario Bros. Film",
+    "genre": "Trickfilm"
+  },
+  {
+    "title": "Elemental",
+    "genre": "Fantasy"
+  },
+  {
+    "title": "Felix - Ein Hase auf Weltreise",
+    "genre": ""
   },
   {
     "title": "Greatest Days",
-    "genre": ""
+    "genre": "Drama"
   },
   {
     "title": "Guardians of the Galaxy: Volume 3",
@@ -20,15 +36,15 @@
     "genre": "Abenteuer"
   },
   {
-    "title": "Meine Freundin Conni - Geheimnis um Kater Mau",
+    "title": "Kuddelmuddel bei Pettersson & Findus",
     "genre": ""
   },
   {
     "title": "Miraculous: Ladybug & Cat Noir - Der Film",
-    "genre": ""
+    "genre": "Abenteuer"
   },
   {
-    "title": "Mission: Impossible - Dead Reckoning Teil Eins",
+    "title": "Mission: Impossible 7 - Dead Reckoning Teil 1",
     "genre": ""
   },
   {
@@ -40,15 +56,11 @@
     "genre": ""
   },
   {
-    "title": "The Flash",
-    "genre": ""
-  },
-  {
-    "title": "Transformers: Aufstieg der Bestien",
+    "title": "Spider-Man: Across the Spider-Verse",
     "genre": "Action"
   },
   {
-    "title": "Überflieger: Das Geheimnis des großen Juwels",
-    "genre": "Kinderfilm"
+    "title": "Sword Art Online the Movie: Progressive - Aria of a Starless Night",
+    "genre": ""
   }
 ]
