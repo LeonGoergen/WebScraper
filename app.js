@@ -1,5 +1,6 @@
 import { createRequire } from 'module';
-import * as ServiceTwitter from "./service-twitter.js"
+import { ServiceTwitter } from "./service-twitter.js"
+import { errorHandler } from './errorhandler.js';
 const require = createRequire(import.meta.url);
 
 // Express Server
@@ -275,10 +276,10 @@ function getnewMovies(currentMovies) {
         // Here goes the API Twitter and Instagram calls 
         // How da fck do i tweet ?
         try {
-           const Tweet = new ServiceTwitter.ServiceTwitter
-           Tweet.postTweet(newMovies[0])
+           const Tweet = new ServiceTwitter
+           await Tweet.postTweet(newMovies[0])
         } catch (error) {
-            console.error(error);
+            errorHandler(error,"twitter");
         }
         
     } catch (error) {
