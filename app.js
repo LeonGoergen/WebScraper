@@ -1,6 +1,7 @@
 import { createRequire } from 'module';
 import { ServiceTwitter } from "./service-twitter.js"
 import { errorHandler } from './errorhandler.js';
+import { ServiceInstagram } from './service-insta.js';
 const require = createRequire(import.meta.url);
 
 // Express Server
@@ -281,6 +282,15 @@ function getnewMovies(currentMovies) {
         } catch (error) {
             errorHandler(error,"twitter");
         }
+        /* 
+        try {
+            const InstaPost = new ServiceInstagram
+            await InstaPost.uploadMedia(newMovies[0])
+         } catch (error) {
+             errorHandler(error,"instagram");
+         }
+        */
+
         
     } catch (error) {
         console.error(error);
