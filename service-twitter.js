@@ -23,7 +23,8 @@ export class ServiceTwitter {
     }
     async postTweet(movieObjekt) {
         try {
-            return await this.axiosInstance.post(this.getUrl(), this.makeTweet(movieObjekt))
+            const response= await this.axiosInstance.post(this.getUrl(), this.makeTweet(movieObjekt))
+            return `Status: ${response.status} Tweet created`
         }
         catch (error) {
             throw error
