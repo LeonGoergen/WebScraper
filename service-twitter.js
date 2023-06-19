@@ -25,8 +25,8 @@ export class ServiceTwitter {
         try {
             return await this.axiosInstance.post(this.getUrl(), this.makeTweet(movieObjekt))
         }
-        catch (err) {
-            return err
+        catch (error) {
+            throw error
         }
     }
     makeTweet(movieObjekt) {
