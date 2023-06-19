@@ -21,19 +21,27 @@ export class ServiceTwitter {
             },
         })
     }
-    async postTweet(movie) {
+    async postTweet(movieObjekt) {
         try {
-            return await this.axiosInstance.post(this.getUrl(), this.makeTweet(movie))
+            return await this.axiosInstance.post(this.getUrl(), this.makeTweet(movieObjekt))
         }
         catch (err) {
             return err
         }
     }
-    makeTweet(movie) {
-        var data = JSON.stringify({
-            "text": `Jetzt neu zu sehen: ${movie}! \n #test`
-        });
-        return data
+    makeTweet(movieObjekt) {
+        if (movieObjekt.genre==""){
+            var data = JSON.stringify({
+                "text": `Jetzt neu zu sehen: ${movieObjekt.title}! \nDas sagen Andere: \nImdb: ${movieObjekt.imdbRating} \nRottenTomatoes: ${movieObjekt.rottenTomatoesRating}\n #test`
+            });
+            return data
+        }
+        else {
+            var data = JSON.stringify({
+                "text": `Ein neuer ${movieObjekt.genre}-Film für dich: ${movieObjekt.title}! \nDas sagen Andere:\nImdb: ${movieObjekt.imdbRating}\nRottenTomatoes: ${movieObjekt.rottenTomatoesRating}\n #test`
+            });
+            return data
+        }
     }
     getUrl() {
         return "https://api.twitter.com/2/tweets"

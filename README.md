@@ -34,7 +34,7 @@ Twitter Service kann wie folgt genutzt und eingebunden werden:
 import { ServiceTwitter } from "./service-twitter.js";
 
 const twitter=new ServiceTwitter;
-console.log(await twitter.postTweet("TEST"))
+console.log(await twitter.postTweet({"title": "Der Pate","genre": "Krimi", "imdbRating": "9,2", "rottenTomatoesRating":"97%"}))
 ```
 
 Tokens und Secret, aus Discord in secret.js kopieren.
