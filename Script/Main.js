@@ -19,6 +19,7 @@ import {ApiManager} from "./ApiManager.js";
             console.log('No new movies found');
             return;
         }
+
         const apiManager = new ApiManager();
         const moviesWithRatings = await apiManager.getMovieRatings(newMovies, apiKey, "de");
         await apiManager.postToSocialMedia(moviesWithRatings);
