@@ -7,5 +7,7 @@ export default {
     "redditUsername": 'CinemaSoSe23',
     "redditPassword": 'SoSe2023web2',
     "clientId": '90kipYg9z6cb7XbUhZ-eQA',
-    "clientSecret": 'dXKfo6ev7U77PoqCEjt-W8KhjztlWw'
+    "clientSecret": 'dXKfo6ev7U77PoqCEjt-W8KhjztlWw',
+
+    "imdbApiKey": "k_r5zmhtbn"
 }

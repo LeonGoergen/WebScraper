@@ -49,8 +49,6 @@ export class ServiceReddit {
                     kind: 'self',  // 'self' für Textpost, 'link' für Linkpost
                 })
             );
-
-            return `Status: ${response.status} Post created`;
         }
         catch (error) {
             throw error;

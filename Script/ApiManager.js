@@ -2,12 +2,15 @@ import {ServiceTwitter} from "./serviceTwitter.js";
 import {errorHandler} from "./errorHandler.js";
 import {ServiceInstagram} from "./serviceInsta.js";
 import { ServiceReddit } from './serviceReddit.js';
+import secrets from "./secrets.js";
+
 import axios from "axios";
 
 export class ApiManager {
     constructor() {}
 
-    async getMovieRatings(movies, apiKey, language) {
+    async getMovieRatings(movies, language) {
+        let apiKey = secrets.imdbApiKey;
         let moviesWithRatings = [];
         for (let movie of movies) {
             console.log("Get Rating for: '" + movie.title + "'...");
@@ -69,7 +72,7 @@ export class ApiManager {
         console.log("\nPosting to social media...")
         for (let movie of moviesWithRatings) {
             console.log(`\nTitle: "${movie.title}"\nGenre: "${movie.genre}"\nIMDB: "${movie.imdb}"\nRottenTomatoes: "${movie.rotten}"\nImage: "${movie.image}"\n`);
-            //await this.postToTwitter(movie);
+            await this.postToTwitter(movie);
             //await this.postToInsta(movie);
             await this.postToReddit(movie);
         }

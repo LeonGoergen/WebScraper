@@ -7,7 +7,6 @@ import {ApiManager} from "./ApiManager.js";
         const sections = ['Woche', 'Heute', 'TOP10', 'Vorverkauf',  'Events', 'Vorschau'];
         const specificGenres = ['Event', 'Live-Übertragung', 'Sondervorstellung', 'Vorpremiere'];
         const url = 'https://www.cinestar.de/kino-rostock-capitol#Kinoprogramm';
-        const apiKey = "k_r5zmhtbn";
 
         const scraper = new WebScraper(url, false, 0);
         const movies = await scraper.getMoviesFromWebsite(sections);
@@ -21,7 +20,7 @@ import {ApiManager} from "./ApiManager.js";
         }
 
         const apiManager = new ApiManager();
-        const moviesWithRatings = await apiManager.getMovieRatings(newMovies, apiKey, "de");
+        const moviesWithRatings = await apiManager.getMovieRatings(newMovies, "de");
         await apiManager.postToSocialMedia(moviesWithRatings);
         
     } catch (error) {
