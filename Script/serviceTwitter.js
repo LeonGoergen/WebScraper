@@ -31,7 +31,7 @@ export class ServiceTwitter {
     }
     makeTweet(movieObjekt) {
         return JSON.stringify({
-            "text": `Jetzt neu zu sehen: ${movieObjekt.title}! \nGenre: ${movieObjekt.genre}\n\nDas sagen Andere: \nImdb: ${movieObjekt.imdb} \nRottenTomatoes: ${movieObjekt.rotten}\n #test`
+            "text": `Jetzt neu zu sehen: ${movieObjekt.title}! \nGenre: ${movieObjekt.genre}\n\nDas sagen Andere: \nImdb: ${movieObjekt.imdb} \nRottenTomatoes: ${movieObjekt.rotten}\n`
         })
     }
     getUrl() {

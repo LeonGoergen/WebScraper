@@ -1,6 +1,7 @@
 import {ServiceTwitter} from "./serviceTwitter.js";
 import {errorHandler} from "./errorHandler.js";
 import {ServiceInstagram} from "./serviceInsta.js";
+import { ServiceReddit } from './serviceReddit.js';
 import axios from "axios";
 
 export class ApiManager {
@@ -53,12 +54,24 @@ export class ApiManager {
         }
     }
 
+    async postToReddit(movie) {
+        try {
+            const RedditPost = new ServiceReddit();
+            await RedditPost.postToReddit(movie)
+            console.log("posted to reddit!");
+        } catch (error) {
+            console.log("error at reddit:");
+            console.log(error);
+        }
+    }
+
     async postToSocialMedia(moviesWithRatings) {
         console.log("\nPosting to social media...")
         for (let movie of moviesWithRatings) {
             console.log(`\nTitle: "${movie.title}"\nGenre: "${movie.genre}"\nIMDB: "${movie.imdb}"\nRottenTomatoes: "${movie.rotten}"\nImage: "${movie.image}"\n`);
-            await this.postToTwitter(movie);
-            await this.postToInsta(movie);
+            //await this.postToTwitter(movie);
+            //await this.postToInsta(movie);
+            await this.postToReddit(movie);
         }
     }
 }
