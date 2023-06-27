@@ -1,7 +1,9 @@
 import {WebScraper} from "./WebScraper.js";
 import {MovieHandler} from "./MovieHandler.js";
 import {ApiManager} from "./ApiManager.js";
+import {Server} from "./Server.js";
 
+function main(){
 (async () => {
     try {
         const sections = ['Woche', 'Heute', 'TOP10', 'Vorverkauf',  'Events', 'Vorschau'];
@@ -27,3 +29,8 @@ import {ApiManager} from "./ApiManager.js";
         console.error(error);
     }
 })();
+}
+
+const server = new Server();
+server.start(main)
+
