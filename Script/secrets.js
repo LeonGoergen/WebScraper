@@ -4,10 +4,10 @@ export default {
     "tokenKey":"1655124797402107905-0INZX7ChXNxs20FCU7RKTnWafXwJ4v",
     "tokenSecret":"QTScf0ybOgL2bFt0FlgkoALon7sbKNrTd7FzJtFHaqb34",
 
-    "redditUsername": 'CinemaSoSe23',
-    "redditPassword": 'SoSe2023web2',
-    "clientId": '90kipYg9z6cb7XbUhZ-eQA',
-    "clientSecret": 'dXKfo6ev7U77PoqCEjt-W8KhjztlWw',
+    "redditUsername": 'CinemaWeb20',
+    "redditPassword": 'CinemaSoSe23',
+    "clientId": '1t4N00lg099IMNsNtMaJZw',
+    "clientSecret": 'g0yMH_20HUZ0tVtYP66WM8_uHqmmbQ',
 
     "imdbApiKey": "k_r5zmhtbn"
 }

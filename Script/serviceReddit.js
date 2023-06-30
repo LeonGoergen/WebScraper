@@ -43,7 +43,7 @@ export class ServiceReddit {
             const response = await this.axiosInstance.post(
                 'https://oauth.reddit.com/api/submit',
                 qs.stringify({
-                    sr: 'r/cinemaSoSe23',  // Name des Subreddits
+                    sr: 'r/MovieNotificationWeb2',  // Name des Subreddits
                     title: movieObjekt.title,  // Titel des Posts
                     text: `Genre: ${movieObjekt.genre}\n\nDas sagen Andere: \nImdb: ${movieObjekt.imdb} \nRottenTomatoes: ${movieObjekt.rotten}`,
                     kind: 'self',  // 'self' für Textpost, 'link' für Linkpost

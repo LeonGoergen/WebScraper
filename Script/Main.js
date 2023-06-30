@@ -1,7 +1,6 @@
 import {WebScraper} from "./WebScraper.js";
 import {MovieHandler} from "./MovieHandler.js";
 import {ApiManager} from "./ApiManager.js";
-import {Server} from "./Server.js";
 
 function main(){
 (async () => {

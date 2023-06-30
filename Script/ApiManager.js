@@ -72,8 +72,8 @@ export class ApiManager {
         console.log("\nPosting to social media...")
         for (let movie of moviesWithRatings) {
             console.log(`\nTitle: "${movie.title}"\nGenre: "${movie.genre}"\nIMDB: "${movie.imdb}"\nRottenTomatoes: "${movie.rotten}"\nImage: "${movie.image}"\n`);
-            //await this.postToTwitter(movie);
-            //await this.postToReddit(movie);
+            await this.postToTwitter(movie);
+            await this.postToReddit(movie);
         }
     }
 }
