@@ -10,7 +10,7 @@ function main(){
         const specificGenres = ['Event', 'Live-Übertragung', 'Sondervorstellung', 'Vorpremiere'];
         const url = 'https://www.cinestar.de/kino-rostock-capitol#Kinoprogramm';
 
-        const scraper = new WebScraper(url, false, 0);
+        const scraper = new WebScraper(url, false, 50);
         const movies = await scraper.getMoviesFromWebsite(sections);
 
         const movieHandler = new MovieHandler();
@@ -31,6 +31,7 @@ function main(){
 })();
 }
 
-const server = new Server();
-server.start(main)
+main();
+//const server = new Server();
+//server.start(main)
 
